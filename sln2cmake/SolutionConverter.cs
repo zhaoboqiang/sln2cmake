@@ -14,22 +14,27 @@ namespace Sln2CMake
     {
         static public void Run(IServiceProvider serviceProvider, IVsStatusbar statusbar)
         {
-            uint cookie = 0;
-
             var dte = (DTE2)serviceProvider.GetService(typeof(DTE));
             var projects = dte.Solution.Projects;
 
+            uint cookie = 0;
+            object icon = (short)Microsoft.VisualStudio.Shell.Interop.Constants.SBAI_Build;
+
             // Initialize the progress bar.
             statusbar.Progress(ref cookie, 1, "", 0, 0);
+            statusbar.Animation(1, ref icon);
 
             for (uint i = 1, n = (uint)projects.Count; i <= n; ++i)
             {
                 var project = projects.Item(i);
                 statusbar.Progress(ref cookie, 1, "", i + 1, n);
                 statusbar.SetText(string.Format("Converting {0}", project.Name));
+
+                ProjectConverter.Run(project);
             }
 
             // Clear the progress bar.
+            statusbar.Animation(0, ref icon);
             statusbar.Progress(ref cookie, 0, "", 0, 0);
             statusbar.FreezeOutput(0);
             statusbar.Clear();
