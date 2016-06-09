@@ -30,7 +30,7 @@ namespace Sln2CMake
                 statusbar.Progress(ref cookie, 1, "", i + 1, n);
                 statusbar.SetText(string.Format("Converting {0}", project.Name));
 
-                ProjectConverter.Run(project);
+                ProjectConverter.Run(serviceProvider, project);
             }
 
             // Clear the progress bar.
