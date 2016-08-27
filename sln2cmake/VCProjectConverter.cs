@@ -99,11 +99,19 @@ namespace Sln2CMake
                 streamWriter.WriteLine();
                 break;
             case ConfigurationTypes.typeDynamicLibrary:
-            case ConfigurationTypes.typeStaticLibrary:
                 streamWriter.WriteLine("set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)");
                 streamWriter.WriteLine("set(ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)");
                 streamWriter.WriteLine();
                 streamWriter.WriteLine("add_library({0}", vcproject.Name);
+                ParseSourceFile(streamWriter, (IVCCollection)vcproject.Files, SourceExtention);
+                streamWriter.WriteLine(")");
+                streamWriter.WriteLine();
+                break;
+            case ConfigurationTypes.typeStaticLibrary:
+                streamWriter.WriteLine("set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)");
+                streamWriter.WriteLine("set(ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)");
+                streamWriter.WriteLine();
+                streamWriter.WriteLine("add_library({0} STATIC", vcproject.Name);
                 ParseSourceFile(streamWriter, (IVCCollection)vcproject.Files, SourceExtention);
                 streamWriter.WriteLine(")");
                 streamWriter.WriteLine();
